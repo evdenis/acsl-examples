@@ -1,3 +1,7 @@
+#ifndef NULL
+# define NULL ((void *)0)
+#endif
+
 /*@ requires n >= 0;
     requires \valid(base + (0 .. n-1));
     requires \forall integer k1, integer k2; 0 <= k1 < k2 < n ==> base[k1] <= base[k2];
