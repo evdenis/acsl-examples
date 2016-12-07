@@ -1,0 +1,72 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
+
+unit fill(intP[..] p, int32 n_1, int32 val)
+  requires ((_C_15 : (n_1 >= (0 :> int32))) &&
+             (_C_16 : \at((if (\at(0,Here) <=
+                                \at(((n_1 :> integer) - 1),Here)) then 
+                          (((\offset_min(\at(p,Here)) <= \at(0,Here)) &&
+                             (\offset_max(\at(p,Here)) >=
+                               \at(((n_1 :> integer) - 1),Here))) &&
+                            (\forall integer __framac_tmp1;
+                              (((\at(0,Here) <= __framac_tmp1) &&
+                                 (__framac_tmp1 <=
+                                   \at(((n_1 :> integer) - 1),Here))) ==>
+                                true))) else true),Here)));
+behavior default:
+  assigns (p + [0..((n_1 :> integer) - 1)]).intM;
+  ensures (_C_14 : (\forall integer i_1;
+                     (((0 <= i_1) && (i_1 < (\at(n_1,Old) :> integer))) ==>
+                       ((\at(p,Old) + i_1).intM == \at(val,Old)))));
+{  
+   (var int32 i);
+   
+   {  (_C_1 : (i = (0 :> int32)));
+      
+      loop 
+      behavior default:
+        invariant (_C_4 : ((_C_5 : ((0 :> int32) <= i)) &&
+                            (_C_6 : (i <= n_1))));
+      behavior default:
+        invariant (_C_3 : (\forall integer k_1;
+                            (((0 <= k_1) && (k_1 < (i :> integer))) ==>
+                              ((p + k_1).intM == val))));
+      variant (_C_2 : ((n_1 :> integer) - (i :> integer)));
+      while (true)
+      {  
+         {  (if (_C_7 : (i < n_1)) then () else 
+            (goto while_0_break));
+            (_C_10 : ((_C_9 : (_C_8 : (p + i)).intM) = val));
+            (_C_13 : (i = (_C_12 : ((_C_11 : (i + (1 :> int32))) :> int32))))
+         }
+      };
+      (while_0_break : ());
+      
+      (return ())
+   }
+}

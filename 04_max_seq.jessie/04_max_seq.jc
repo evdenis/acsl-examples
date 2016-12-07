@@ -1,0 +1,160 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
+
+int32 max_element(intP[..] a, int32 n_1)
+  requires ((_C_35 : (n_1 >= (0 :> int32))) &&
+             (_C_36 : \at((if (\at(0,Here) <=
+                                \at(((n_1 :> integer) - 1),Here)) then 
+                          (((\offset_min(\at(a,Here)) <= \at(0,Here)) &&
+                             (\offset_max(\at(a,Here)) >=
+                               \at(((n_1 :> integer) - 1),Here))) &&
+                            (\forall integer __framac_tmp1;
+                              (((\at(0,Here) <= __framac_tmp1) &&
+                                 (__framac_tmp1 <=
+                                   \at(((n_1 :> integer) - 1),Here))) ==>
+                                true))) else true),Here)));
+behavior default:
+  assigns \nothing;
+  ensures true;
+behavior empty:
+  assumes (n_1 == (0 :> int32));
+  ensures (_C_25 : (\result == (0 :> int32)));
+behavior not_empty:
+  assumes ((0 :> int32) < n_1);
+  ensures (_C_26 : (((_C_28 : ((0 :> int32) <= \result)) &&
+                      (_C_29 : (\result < \at(n_1,Old)))) &&
+                     ((_C_31 : (\forall integer i_1;
+                                 (((0 <= i_1) &&
+                                    (i_1 < (\at(n_1,Old) :> integer))) ==>
+                                   ((\at(a,Old) + i_1).intM <=
+                                     (\at(a,Old) + (\result :> integer)).intM)))) &&
+                       (_C_32 : (\forall integer i_2;
+                                  (((0 <= i_2) &&
+                                     (i_2 < (\result :> integer))) ==>
+                                    ((\at(a,Old) + i_2).intM <
+                                      (\at(a,Old) + (\result :> integer)).intM)))))));
+{  
+   (check (disjoint_behaviors : (! ((n_1 == (0 :> int32)) &&
+                                     ((0 :> int32) < n_1)))));
+   
+   (check (complete_behaviors : (((0 :> int32) < n_1) ||
+                                  (n_1 == (0 :> int32)))));
+   
+   (var int32 max);
+   
+   (var int32 i);
+   
+   (var int32 __retres);
+   
+   {  (if (_C_2 : (n_1 == (0 :> int32))) then 
+      {  (_C_1 : (__retres = (0 :> int32)));
+         
+         (goto return_label)
+      } else ());
+      (_C_3 : (max = (0 :> int32)));
+      
+      {  (_C_4 : (i = (1 :> int32)));
+         
+         loop 
+         behavior default:
+           invariant (_C_11 : ((_C_12 : ((0 :> int32) <= i)) &&
+                                (_C_13 : (i <= n_1))));
+         behavior default:
+           invariant (_C_8 : ((_C_9 : ((0 :> int32) <= max)) &&
+                               (_C_10 : (max < n_1))));
+         behavior default:
+           invariant (_C_7 : (\forall integer k_1;
+                               (((0 <= k_1) && (k_1 < (i :> integer))) ==>
+                                 ((a + k_1).intM <=
+                                   (a + (max :> integer)).intM))));
+         behavior default:
+           invariant (_C_6 : (\forall integer k_2;
+                               (((0 <= k_2) && (k_2 < (max :> integer))) ==>
+                                 ((a + k_2).intM <
+                                   (a + (max :> integer)).intM))));
+         behavior default:
+           
+           assigns max,
+           i;
+         variant (_C_5 : ((n_1 :> integer) - (i :> integer)));
+         while (true)
+         {  
+            {  (if (_C_14 : (i < n_1)) then () else 
+               (goto while_0_break));
+               
+               {  (if (_C_20 : ((_C_19 : (_C_18 : (a + max)).intM) <
+                                 (_C_17 : (_C_16 : (a + i)).intM))) then 
+                  (_C_15 : (max = i)) else ())
+               };
+               (_C_23 : (i = (_C_22 : ((_C_21 : (i + (1 :> int32))) :> int32))))
+            }
+         };
+         (while_0_break : ())
+      };
+      (_C_24 : (__retres = max));
+      (return_label : 
+      (return __retres))
+   }
+}
+
+int32 max_seq(intP[..] p, int32 n_2)
+  requires ((_C_45 : (n_2 > (0 :> int32))) &&
+             (_C_46 : \at((if (\at(0,Here) <=
+                                \at(((n_2 :> integer) - 1),Here)) then 
+                          (((\offset_min(\at(p,Here)) <= \at(0,Here)) &&
+                             (\offset_max(\at(p,Here)) >=
+                               \at(((n_2 :> integer) - 1),Here))) &&
+                            (\forall integer __framac_tmp2;
+                              (((\at(0,Here) <= __framac_tmp2) &&
+                                 (__framac_tmp2 <=
+                                   \at(((n_2 :> integer) - 1),Here))) ==>
+                                true))) else true),Here)));
+behavior default:
+  assigns \nothing;
+  ensures (_C_42 : ((_C_43 : (\forall integer i_3;
+                               (((0 <= i_3) &&
+                                  (i_3 <= ((\at(n_2,Old) :> integer) - 1))) ==>
+                                 (\result >= (\at(p,Old) + i_3).intM)))) &&
+                     (_C_44 : (\exists integer e;
+                                (((0 <= e) &&
+                                   (e <= ((\at(n_2,Old) :> integer) - 1))) &&
+                                  (\result == (\at(p,Old) + e).intM))))));
+{  
+   (var int32 tmp);
+   
+   (var int32 __retres_0);
+   
+   {  
+      {  (_C_38 : (tmp = (_C_37 : max_element(p, n_2))));
+         ()
+      };
+      (_C_41 : (__retres_0 = (_C_40 : (_C_39 : (p + tmp)).intM)));
+      
+      (return __retres_0)
+   }
+}

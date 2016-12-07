@@ -1,0 +1,389 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
+
+predicate sorted{Here}(intP[..] a, integer start_index, integer end_index) =
+(\forall integer k1;
+  (\forall integer k2;
+    ((((start_index <= k1) && (k1 <= k2)) && (k2 <= end_index)) ==>
+      ((a + k1).intM <= (a + k2).intM))))
+
+predicate swapped{L1, L2}(intP[..] a_0, integer i_1, integer j_0) =
+(((\at((a_0 + i_1).intM,L1) == \at((a_0 + j_0).intM,L2)) &&
+   (\at((a_0 + j_0).intM,L1) == \at((a_0 + i_1).intM,L2))) &&
+  (\forall integer k_1;
+    (((k_1 != i_1) && (k_1 != j_0)) ==>
+      (\at((a_0 + k_1).intM,L1) == \at((a_0 + k_1).intM,L2)))))
+
+predicate _Permut{L1, L2}(intP[..] a_1, integer index_start,
+                          integer end_start) {
+case Permut_refl{L}: \at((\forall intP[..] a_2;
+                           (\forall integer index_start_0;
+                             (\forall integer end_start_0;
+                               _Permut{L,
+                               L}(a_2, index_start_0, end_start_0)))),L);
+  
+  case Permut_sym{L1, L2}: (\forall intP[..] a_3;
+                             (\forall integer index_start_1;
+                               (\forall integer end_start_1;
+                                 (_Permut{L1,
+                                   L2}(a_3, index_start_1, end_start_1) ==>
+                                   _Permut{L2,
+                                   L1}(a_3, index_start_1, end_start_1)))));
+  
+  case Permut_trans{L1, L2, L3}: (\forall intP[..] a_4;
+                                   (\forall integer index_start_2;
+                                     (\forall integer end_start_2;
+                                       ((_Permut{L1,
+                                          L2}(a_4, index_start_2, end_start_2) &&
+                                          _Permut{L2,
+                                          L3}(a_4, index_start_2, end_start_2)) ==>
+                                         _Permut{L1,
+                                         L3}(a_4, index_start_2, end_start_2)))));
+  
+  case Permut_swap{L1, L2}: (\forall intP[..] a_5;
+                              (\forall integer index_start_3;
+                                (\forall integer end_start_3;
+                                  (\forall integer i_2;
+                                    (\forall integer j_1;
+                                      ((((((index_start_3 <= i_2) &&
+                                            (i_2 <= end_start_3)) &&
+                                           (index_start_3 <= j_1)) &&
+                                          (j_1 <= end_start_3)) &&
+                                         swapped{L1,
+                                         L2}(a_5, i_2, j_1)) ==>
+                                        _Permut{L1,
+                                        L2}(a_5, index_start_3, end_start_3)))))));
+  
+}
+
+unit swap(intP[..] t, int32 i, int32 j, int32 n_9)
+  requires (_C_15 : ((_C_16 : \at((((\offset_min(\at(t,Here)) <=
+                                      \at((i :> integer),Here)) &&
+                                     (\offset_max(\at(t,Here)) >=
+                                       \at((i :> integer),Here))) &&
+                                    (\forall integer __framac_tmp2;
+                                      (((\at((i :> integer),Here) <=
+                                          __framac_tmp2) &&
+                                         (__framac_tmp2 <=
+                                           \at((i :> integer),Here))) ==>
+                                        true))),Here)) &&
+                      (_C_17 : \at((((\offset_min(\at(t,Here)) <=
+                                       \at((j :> integer),Here)) &&
+                                      (\offset_max(\at(t,Here)) >=
+                                        \at((j :> integer),Here))) &&
+                                     (\forall integer __framac_tmp1;
+                                       (((\at((j :> integer),Here) <=
+                                           __framac_tmp1) &&
+                                          (__framac_tmp1 <=
+                                            \at((j :> integer),Here))) ==>
+                                         true))),Here))));
+behavior default:
+  ensures (_C_12 : ((_C_13 : (\forall integer k_2;
+                               (((((0 <= k_2) &&
+                                    (k_2 < (\at(n_9,Old) :> integer))) &&
+                                   (k_2 != (\at(i,Old) :> integer))) &&
+                                  (k_2 != (\at(j,Old) :> integer))) ==>
+                                 ((\at(t,Old) + k_2).intM ==
+                                   \at((t + k_2).intM,Old))))) &&
+                     (_C_14 : swapped{Old,
+                     Here}(\at(t,Old), (\at(i,Old) :> integer),
+                           (\at(j,Old) :> integer)))));
+{  
+   (var int32 tmp);
+   
+   {  (_C_3 : (tmp = (_C_2 : (_C_1 : (t + i)).intM)));
+      (_C_8 : ((_C_7 : (_C_6 : (t + i)).intM) = (_C_5 : (_C_4 : (t + j)).intM)));
+      (_C_11 : ((_C_10 : (_C_9 : (t + j)).intM) = tmp));
+      
+      (return ())
+   }
+}
+
+unit bubble_sort(intP[..] a, int32 length)
+  requires ((_C_83 : ((0 :> int32) < length)) &&
+             (_C_84 : \at((if (\at(0,Here) <=
+                                \at(((length :> integer) - 1),Here)) then 
+                          (((\offset_min(\at(a,Here)) <= \at(0,Here)) &&
+                             (\offset_max(\at(a,Here)) >=
+                               \at(((length :> integer) - 1),Here))) &&
+                            (\forall integer __framac_tmp3;
+                              (((\at(0,Here) <= __framac_tmp3) &&
+                                 (__framac_tmp3 <=
+                                   \at(((length :> integer) - 1),Here))) ==>
+                                true))) else true),Here)));
+behavior default:
+  ensures true;
+behavior sorted:
+  ensures (_C_81 : sorted{Here}(\at(a,Old), 0,
+                                ((\at(length,Old) :> integer) - 1)));
+behavior permutation:
+  ensures (_C_82 : _Permut{Old,
+          Here}(\at(a,Old), 0, ((\at(length,Old) :> integer) - 1)));
+{  
+   (var int32 up);
+   
+   (var int32 down);
+   
+   (var int32 fixed_up);
+   
+   {  (_C_18 : (up = (1 :> int32)));
+      (_C_19 : (fixed_up = up));
+      
+      loop 
+      behavior sorted:
+        invariant (_C_26 : (fixed_up == up));
+      behavior sorted:
+        invariant (_C_23 : ((_C_24 : ((0 :> int32) < up)) &&
+                             (_C_25 : (up <= length))));
+      behavior sorted:
+        invariant (_C_22 : sorted{Here}(a, 0, ((up :> integer) - 1)));
+      behavior sorted:
+        invariant (_C_21 : (\forall integer k_4;
+                             ((((up :> integer) < k_4) &&
+                                (k_4 < (length :> integer))) ==>
+                               ((a + k_4).intM == \at((a + k_4).intM,Pre)))));
+      behavior permutation:
+        invariant (_C_20 : _Permut{Pre,
+                  Here}(a, 0, ((length :> integer) - 1)));
+      while (true)
+      {  
+         {  (if (_C_27 : (up < length)) then () else 
+            (goto while_0_break));
+            
+            {  
+               {  
+                  (assert for sorted: (_C_28 : (jessie : sorted{Here}(
+                                               a, 0, ((up :> integer) - 1)))));
+                  ()
+               };
+               
+               {  
+                  (assert for permutation: (_C_29 : (jessie : _Permut{Pre,
+                                                    Here}(a, 0,
+                                                          ((length :> integer) -
+                                                            1)))));
+                  ()
+               };
+               (_C_30 : (fixed_up = up));
+               (_C_31 : (down = up));
+               
+               {  
+                  (assert for sorted: (_C_32 : (jessie : sorted{Here}(
+                                               a, (down :> integer),
+                                               (up :> integer)))));
+                  ()
+               };
+               
+               {  
+                  (assert for default: (_C_33 : (jessie : (down < length))));
+                  ()
+               };
+               
+               loop 
+               behavior sorted:
+                 invariant (_C_47 : (fixed_up == up));
+               behavior sorted:
+                 invariant (_C_44 : ((_C_45 : ((0 :> int32) <= down)) &&
+                                      (_C_46 : (down < length))));
+               behavior sorted:
+                 invariant (_C_39 : (((_C_41 : ((0 :> int32) <= down)) &&
+                                       (_C_42 : (down <= up))) &&
+                                      (_C_43 : (up < length))));
+               behavior sorted:
+                 invariant (_C_38 : sorted{Here}(a, 0,
+                                                 ((down :> integer) - 1)));
+               behavior sorted:
+                 invariant (_C_37 : sorted{Here}(a, (down :> integer),
+                                                 (up :> integer)));
+               behavior sorted:
+                 invariant (_C_36 : (\forall integer k_3;
+                                      ((((up :> integer) < k_3) &&
+                                         (k_3 < (length :> integer))) ==>
+                                        ((a + k_3).intM ==
+                                          \at((a + k_3).intM,Pre)))));
+               behavior sorted:
+                 invariant (_C_35 : ((((0 :> int32) < down) && (down < up)) ==>
+                                      ((a + ((down :> integer) - 1)).intM <=
+                                        (a + ((down :> integer) + 1)).intM)));
+               behavior permutation:
+                 invariant (_C_34 : _Permut{Pre,
+                           Here}(a, 0, ((length :> integer) - 1)));
+               while (true)
+               {  
+                  {  (if (_C_55 : ((0 :> int32) < down)) then (if (_C_54 : 
+                                                                  ((_C_53 : 
+                                                                   (_C_52 : 
+                                                                   (a +
+                                                                    down)).intM) <
+                                                                    (_C_51 : 
+                                                                    (_C_50 : 
+                                                                    (a +
+                                                                    (_C_49 : (
+                                                                    (_C_48 : 
+                                                                    (down -
+                                                                    (1 :> int32))) :> int32)))).intM))) then () else 
+                                                              (goto while_1_break)) else 
+                     (goto while_1_break));
+                     
+                     {  
+                        {  
+                           (assert for permutation: (_C_56 : (jessie : _Permut{Pre,
+                                                             Here}(a, 0,
+                                                                   ((length :> integer) -
+                                                                    1)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_57 : (jessie : sorted{Here}(
+                                                        a, 0,
+                                                        ((down :> integer) -
+                                                          1)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_58 : (jessie : sorted{Here}(
+                                                        a, (down :> integer),
+                                                        (up :> integer)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_59 : (jessie : ((a +
+                                                                    (down :> integer)).intM <
+                                                                    (a +
+                                                                    ((down :> integer) -
+                                                                    1)).intM))));
+                           ()
+                        };
+                        (_C_62 : swap(a, down,
+                                      (_C_61 : ((_C_60 : (down -
+                                                           (1 :> int32))) :> int32)),
+                                      length));
+                        
+                        {  
+                           (assert for permutation: (_C_63 : (jessie : _Permut{Pre,
+                                                             Here}(a, 0,
+                                                                   ((length :> integer) -
+                                                                    1)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_64 : (jessie : ((a +
+                                                                    ((down :> integer) -
+                                                                    1)).intM <=
+                                                                    (a +
+                                                                    (down :> integer)).intM))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_65 : (jessie : sorted{Here}(
+                                                        a, 0,
+                                                        ((down :> integer) -
+                                                          2)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_66 : (jessie : sorted{Here}(
+                                                        a, (down :> integer),
+                                                        (up :> integer)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_67 : (jessie : sorted{Here}(
+                                                        a,
+                                                        ((down :> integer) -
+                                                          1),
+                                                        (up :> integer)))));
+                           ()
+                        };
+                        (_C_70 : (down = (_C_69 : ((_C_68 : (down -
+                                                              (1 :> int32))) :> int32))));
+                        
+                        {  
+                           (assert for sorted: (_C_71 : (jessie : sorted{Here}(
+                                                        a, 0,
+                                                        ((down :> integer) -
+                                                          1)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (_C_72 : (jessie : sorted{Here}(
+                                                        a, (down :> integer),
+                                                        (up :> integer)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for permutation: (_C_73 : (jessie : _Permut{Pre,
+                                                             Here}(a, 0,
+                                                                   ((length :> integer) -
+                                                                    1)))));
+                           ()
+                        }
+                     }
+                  }
+               };
+               (while_1_break : ());
+               
+               {  
+                  (assert for sorted: (_C_74 : (jessie : sorted{Here}(
+                                               a, 0, (up :> integer)))));
+                  ()
+               };
+               
+               {  
+                  (assert for permutation: (_C_75 : (jessie : _Permut{Pre,
+                                                    Here}(a, 0,
+                                                          ((length :> integer) -
+                                                            1)))));
+                  ()
+               }
+            };
+            (_C_78 : (up = (_C_77 : ((_C_76 : (up + (1 :> int32))) :> int32))));
+            (_C_79 : (fixed_up = up))
+         }
+      };
+      (while_0_break : ());
+      
+      {  
+         (assert for permutation: (_C_80 : (jessie : _Permut{Pre,
+                                           Here}(a, 0,
+                                                 ((length :> integer) - 1)))));
+         ()
+      };
+      
+      (return ())
+   }
+}

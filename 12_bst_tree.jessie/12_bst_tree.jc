@@ -1,0 +1,162 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag node = voidP with {
+  node[..] right: 64; 
+  node[..] left: 64; 
+  uint64 value_0: 64;
+}
+
+tag root_0 = {
+  node[..] node_0: 64;
+}
+
+type root_0 = [root_0]
+
+axiomatic btree_calc_size {
+
+  logic integer calc_size{L}(node[..] node) =
+  (if (node == null) then 0 else ((calc_size{L}(node.right) +
+                                    calc_size{L}(node.left)) +
+                                   1))
+  
+}
+
+predicate exists_in_tree{L}(node[..] node_0, integer v) {
+case exists1{L}: \at((\forall node[..] node_1;
+                       (\forall integer v_0;
+                         ((\at((((\offset_min(\at(node_1,L)) <= \at(0,L)) &&
+                                  (\offset_max(\at(node_1,L)) >= \at(0,L))) &&
+                                 true),L) &&
+                            ((node_1.value_0 :> integer) == v_0)) ==>
+                           exists_in_tree{L}(node_1, v_0)))),L);
+  
+  case exists2{L}: \at((\forall node[..] node_2;
+                         (\forall integer v_1;
+                           ((\at((((\offset_min(\at(node_2,L)) <= \at(0,L)) &&
+                                    (\offset_max(\at(node_2,L)) >= \at(0,L))) &&
+                                   true),L) &&
+                              exists_in_tree{L}(node_2.left, v_1)) ==>
+                             exists_in_tree{L}(node_2, v_1)))),L);
+  
+  case exists3{L}: \at((\forall node[..] node_3;
+                         (\forall integer v_2;
+                           ((\at((((\offset_min(\at(node_3,L)) <= \at(0,L)) &&
+                                    (\offset_max(\at(node_3,L)) >= \at(0,L))) &&
+                                   true),L) &&
+                              exists_in_tree{L}(node_3.right, v_2)) ==>
+                             exists_in_tree{L}(node_3, v_2)))),L);
+  
+}
+
+predicate correct_btree{L}(node[..] node_4) {
+case nil{L}: \at(correct_btree{L}(null),L);
+  
+  case next{L}: \at((\forall node[..] node_5;
+                      (((((\at((((\offset_min(\at(node_5,L)) <= \at(0,L)) &&
+                                  (\offset_max(\at(node_5,L)) >= \at(0,L))) &&
+                                 true),L) &&
+                            correct_btree{L}(node_5.left)) &&
+                           correct_btree{L}(node_5.right)) &&
+                          (\forall integer v_3;
+                            (exists_in_tree{L}(node_5.left, v_3) ==>
+                              (v_3 < (node_5.value_0 :> integer))))) &&
+                         (\forall integer v_4;
+                           (exists_in_tree{L}(node_5.right, v_4) ==>
+                             (v_4 > (node_5.value_0 :> integer))))) ==>
+                        correct_btree{L}(node_5))),L);
+  
+}
+
+predicate size_correct{L}(node[..] node_6) {
+case nil{L}: \at(size_correct{L}(null),L);
+  
+  case ind{L}: \at((\forall node[..] node_7;
+                     (\at((((\offset_min(\at(node_7,L)) <= \at(0,L)) &&
+                             (\offset_max(\at(node_7,L)) >= \at(0,L))) &&
+                            true),L) ==>
+                       (((calc_size{L}(node_7.left) >= 0) &&
+                          (calc_size{L}(node_7.right) >= 0)) ==>
+                         ((size_correct{L}(node_7.left) &&
+                            size_correct{L}(node_7.right)) ==>
+                           size_correct{L}(node_7))))),L);
+  
+}
+
+node[..] search_node(root_0[..] root, uint64 value)
+  requires ((_C_22 : \at((((\offset_min(\at(root,Here)) <= \at(0,Here)) &&
+                            (\offset_max(\at(root,Here)) >= \at(0,Here))) &&
+                           true),Here)) &&
+             ((_C_23 : correct_btree{Here}(root.node_0)) &&
+               (_C_24 : size_correct{Here}(root.node_0))));
+behavior default:
+  ensures (_C_19 : ((_C_20 : ((\result != null) <==>
+                               exists_in_tree{Here}(\at(root,Old).node_0,
+                                                    (\at(value,Old) :> integer)))) &&
+                     (_C_21 : ((\result != null) ==>
+                                (\at((((\offset_min(\at(\result,Here)) <=
+                                         \at(0,Here)) &&
+                                        (\offset_max(\at(\result,Here)) >=
+                                          \at(0,Here))) &&
+                                       true),Here) &&
+                                  (\result.value_0 == \at(value,Old)))))));
+{  
+   (var node[..] n_9);
+   
+   (var node[..] __retres);
+   
+   {  (_C_2 : (n_9 = (_C_1 : root.node_0)));
+      
+      loop 
+      behavior default:
+        invariant (_C_7 : (exists_in_tree{Here}(root.node_0,
+                                                (value :> integer)) <==>
+                            exists_in_tree{Here}(n_9, (value :> integer))));
+      behavior default:
+        invariant (_C_6 : correct_btree{Here}(n_9));
+      behavior default:
+        invariant (_C_5 : size_correct{Here}(n_9));
+      behavior default:
+        invariant (_C_4 : (calc_size{Here}(n_9) >= 0));
+      variant (_C_3 : calc_size{Here}(n_9));
+      while (true)
+      {  
+         {  (if (_C_8 : (n_9 != null)) then () else 
+            (goto while_0_break));
+            
+            {  (if (_C_17 : (value < (_C_16 : n_9.value_0))) then (_C_15 : (n_9 = 
+                                                                  (_C_14 : n_9.left))) else 
+               (if (_C_13 : (value > (_C_12 : n_9.value_0))) then (_C_11 : (n_9 = 
+                                                                  (_C_10 : n_9.right))) else 
+               {  (_C_9 : (__retres = n_9));
+                  
+                  (goto return_label)
+               }))
+            }
+         }
+      };
+      (while_0_break : ());
+      (_C_18 : (__retres = null));
+      (return_label : 
+      (return __retres))
+   }
+}

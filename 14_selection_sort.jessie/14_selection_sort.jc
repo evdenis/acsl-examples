@@ -1,0 +1,223 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
+
+predicate _Swap{L1, L2}(intP[..] a, integer i_1, integer j_0) =
+(((\at((a + i_1).intM,L1) == \at((a + j_0).intM,L2)) &&
+   (\at((a + j_0).intM,L1) == \at((a + i_1).intM,L2))) &&
+  (\forall integer k_1;
+    (((k_1 != i_1) && (k_1 != j_0)) ==>
+      (\at((a + k_1).intM,L1) == \at((a + k_1).intM,L2)))))
+
+predicate _Permut{L1, L2}(intP[..] a_0, integer l, integer h) {
+case Permut_refl{L}: \at((\forall intP[..] a_1;
+                           (\forall integer l_0;
+                             (\forall integer h_0;
+                               _Permut{L,
+                               L}(a_1, l_0, h_0)))),L);
+  
+  case Permut_sym{L1, L2}: (\forall intP[..] a_2;
+                             (\forall integer l_1;
+                               (\forall integer h_1;
+                                 (_Permut{L1,
+                                   L2}(a_2, l_1, h_1) ==>
+                                   _Permut{L2,
+                                   L1}(a_2, l_1, h_1)))));
+  
+  case Permut_trans{L1, L2, L3}: (\forall intP[..] a_3;
+                                   (\forall integer l_2;
+                                     (\forall integer h_2;
+                                       ((_Permut{L1,
+                                          L2}(a_3, l_2, h_2) &&
+                                          _Permut{L2,
+                                          L3}(a_3, l_2, h_2)) ==>
+                                         _Permut{L1,
+                                         L3}(a_3, l_2, h_2)))));
+  
+  case Permut_swap{L1, L2}: (\forall intP[..] a_4;
+                              (\forall integer l_3;
+                                (\forall integer h_3;
+                                  (\forall integer i_2;
+                                    (\forall integer j_1;
+                                      ((((((l_3 <= i_2) && (i_2 <= h_3)) &&
+                                           (l_3 <= j_1)) &&
+                                          (j_1 <= h_3)) &&
+                                         _Swap{L1,
+                                         L2}(a_4, i_2, j_1)) ==>
+                                        _Permut{L1,
+                                        L2}(a_4, l_3, h_3)))))));
+  
+}
+
+predicate _Sorted{L}(intP[..] a_5, integer l_4, integer h_4) =
+(\forall integer i_3;
+  (\forall integer j_2;
+    ((((l_4 <= i_3) && (i_3 <= j_2)) && (j_2 < h_4)) ==>
+      ((a_5 + i_3).intM <= (a_5 + j_2).intM))))
+
+unit swap(intP[..] t_0, int32 i, int32 j)
+  requires (_C_13 : ((_C_14 : \at((((\offset_min(\at(t_0,Here)) <=
+                                      \at((i :> integer),Here)) &&
+                                     (\offset_max(\at(t_0,Here)) >=
+                                       \at((i :> integer),Here))) &&
+                                    (\forall integer __framac_tmp2;
+                                      (((\at((i :> integer),Here) <=
+                                          __framac_tmp2) &&
+                                         (__framac_tmp2 <=
+                                           \at((i :> integer),Here))) ==>
+                                        true))),Here)) &&
+                      (_C_15 : \at((((\offset_min(\at(t_0,Here)) <=
+                                       \at((j :> integer),Here)) &&
+                                      (\offset_max(\at(t_0,Here)) >=
+                                        \at((j :> integer),Here))) &&
+                                     (\forall integer __framac_tmp1;
+                                       (((\at((j :> integer),Here) <=
+                                           __framac_tmp1) &&
+                                          (__framac_tmp1 <=
+                                            \at((j :> integer),Here))) ==>
+                                         true))),Here))));
+behavior default:
+  assigns (t_0 + (i :> integer)).intM,
+  (t_0 + (j :> integer)).intM;
+  ensures (_C_12 : _Swap{Old,
+          Here}(\at(t_0,Old), (\at(i,Old) :> integer),
+                (\at(j,Old) :> integer)));
+{  
+   (var int32 tmp);
+   
+   {  (_C_3 : (tmp = (_C_2 : (_C_1 : (t_0 + i)).intM)));
+      (_C_8 : ((_C_7 : (_C_6 : (t_0 + i)).intM) = (_C_5 : (_C_4 : (t_0 + j)).intM)));
+      (_C_11 : ((_C_10 : (_C_9 : (t_0 + j)).intM) = tmp));
+      
+      (return ())
+   }
+}
+
+unit sel_sort(intP[..] t, int32 n_9)
+  requires (_C_64 : \at((if (\at(0,Here) <= \at(((n_9 :> integer) - 1),Here)) then 
+                        (((\offset_min(\at(t,Here)) <= \at(0,Here)) &&
+                           (\offset_max(\at(t,Here)) >=
+                             \at(((n_9 :> integer) - 1),Here))) &&
+                          (\forall integer __framac_tmp3;
+                            (((\at(0,Here) <= __framac_tmp3) &&
+                               (__framac_tmp3 <=
+                                 \at(((n_9 :> integer) - 1),Here))) ==>
+                              true))) else true),Here));
+behavior default:
+  ensures true;
+behavior sorted:
+  ensures (_C_62 : _Sorted{Here}(\at(t,Old), 0, (\at(n_9,Old) :> integer)));
+behavior permutation:
+  ensures (_C_63 : _Permut{Old,
+          Here}(\at(t,Old), 0, ((\at(n_9,Old) :> integer) - 1)));
+{  
+   (var int32 i_0);
+   
+   (var int32 j_0);
+   
+   (var int32 mi);
+   
+   (var int32 mv);
+   
+   {  (if (_C_16 : (n_9 <= (0 :> int32))) then 
+      (goto return_label) else ());
+      (_C_17 : (i_0 = (0 :> int32)));
+      
+      loop 
+      behavior default:
+        invariant (_C_23 : ((_C_24 : ((0 :> int32) <= i_0)) &&
+                             (_C_25 : (i_0 < n_9))));
+      behavior sorted:
+        invariant (_C_20 : ((_C_21 : _Sorted{Here}(t, 0, (i_0 :> integer))) &&
+                             (_C_22 : (\forall integer k1;
+                                        (\forall integer k2;
+                                          (((((0 <= k1) &&
+                                               (k1 < (i_0 :> integer))) &&
+                                              ((i_0 :> integer) <= k2)) &&
+                                             (k2 < (n_9 :> integer))) ==>
+                                            ((t + k1).intM <= (t + k2).intM)))))));
+      behavior permutation:
+        invariant (_C_19 : _Permut{Pre, Here}(t, 0, ((n_9 :> integer) - 1)));
+      variant (_C_18 : ((n_9 :> integer) - (i_0 :> integer)));
+      while (true)
+      {  
+         {  (if (_C_28 : (i_0 <
+                           (_C_27 : ((_C_26 : (n_9 - (1 :> int32))) :> int32)))) then () else 
+            (goto while_0_break));
+            
+            {  (_C_31 : (mv = (_C_30 : (_C_29 : (t + i_0)).intM)));
+               (_C_32 : (mi = i_0));
+               (_C_35 : (j_0 = (_C_34 : ((_C_33 : (i_0 + (1 :> int32))) :> int32))));
+               
+               loop 
+               behavior default:
+                 invariant (_C_41 : (((_C_43 : (i_0 < j_0)) &&
+                                       (_C_44 : (i_0 <= mi))) &&
+                                      (_C_45 : (mi < n_9))));
+               behavior sorted:
+                 invariant (_C_38 : ((_C_39 : (mv ==
+                                                (t + (mi :> integer)).intM)) &&
+                                      (_C_40 : (\forall integer k_2;
+                                                 ((((i_0 :> integer) <= k_2) &&
+                                                    (k_2 < (j_0 :> integer))) ==>
+                                                   ((t + k_2).intM >= mv))))));
+               behavior permutation:
+                 invariant (_C_37 : _Permut{Pre,
+                           Here}(t, 0, ((n_9 :> integer) - 1)));
+               variant (_C_36 : ((n_9 :> integer) - (j_0 :> integer)));
+               while (true)
+               {  
+                  {  (if (_C_46 : (j_0 < n_9)) then () else 
+                     (goto while_1_break));
+                     
+                     {  (if (_C_53 : ((_C_52 : (_C_51 : (t + j_0)).intM) <
+                                       mv)) then 
+                        {  (_C_47 : (mi = j_0));
+                           (_C_50 : (mv = (_C_49 : (_C_48 : (t + j_0)).intM)))
+                        } else ())
+                     };
+                     (_C_56 : (j_0 = (_C_55 : ((_C_54 : (j_0 + (1 :> int32))) :> int32))))
+                  }
+               };
+               (while_1_break : ());
+               (L : (_C_57 : swap(t, i_0, mi)));
+               
+               {  
+                  (assert for default: (_C_58 : (jessie : _Permut{L,
+                                                Here}(t, 0,
+                                                      ((n_9 :> integer) - 1)))));
+                  ()
+               }
+            };
+            (_C_61 : (i_0 = (_C_60 : ((_C_59 : (i_0 + (1 :> int32))) :> int32))))
+         }
+      };
+      (while_0_break : ());
+      (return_label : 
+      (return ()))
+   }
+}

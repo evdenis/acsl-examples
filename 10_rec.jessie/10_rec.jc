@@ -1,0 +1,71 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+logic integer sum_upto(integer n_1) =
+((n_1 * (n_1 + 1)) / 2)
+
+lemma sum_rec :
+(_C_1 : (\forall integer n_2;
+          ((n_2 >= 0) ==>
+            (sum_upto((n_2 + 1)) == ((sum_upto(n_2) + n_2) + 1)))))
+
+int64 sum(int32 x)
+  requires ((_C_13 : (x >= (0 :> int32))) &&
+             (_C_14 : (x <= (1000 :> int32))));
+  decreases (_C_15 : x);
+behavior default:
+  ensures (_C_12 : ((\result :> integer) ==
+                     sum_upto((\at(x,Old) :> integer))));
+{  
+   (var int64 tmp);
+   
+   (var int64 __retres);
+   
+   {  (if (_C_11 : (x == (0 :> int32))) then 
+      {  (_C_10 : (__retres = (0 :> int64)));
+         
+         (goto return_label)
+      } else 
+      {  
+         {  (_C_5 : (tmp = (_C_4 : sum((_C_3 : ((_C_2 : (x - (1 :> int32))) :> int32))))));
+            ()
+         };
+         (_C_9 : (__retres = (_C_8 : ((_C_7 : ((_C_6 : (x :> int64)) + tmp)) :> int64))));
+         
+         (goto return_label)
+      });
+      (return_label : 
+      (return __retres))
+   }
+}
+
+int64 main()
+behavior default:
+  ensures (_C_18 : ((\result :> integer) == 36));
+{  
+   (var int64 i);
+   
+   {  (_C_17 : (i = (_C_16 : sum((8 :> int32)))));
+      
+      (return i)
+   }
+}

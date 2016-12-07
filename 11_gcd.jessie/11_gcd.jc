@@ -1,0 +1,75 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+predicate is_gcd(integer a, integer b, integer d) {
+case gcd_zero: (\forall integer n_1;
+                 is_gcd(n_1, 0, n_1));
+  
+  case gcd_succ: (\forall integer a_0;
+                   (\forall integer b_0;
+                     (\forall integer d_0;
+                       (is_gcd(b_0, (a_0 % b_0), d_0) ==>
+                         is_gcd(a_0, b_0, d_0)))));
+  
+}
+
+axiomatic gcd {
+
+  logic integer gcd(integer a_1, integer b_1)
+   
+  axiom nil :
+  (_C_1 : (\forall integer n_2;
+            (gcd(n_2, 0) == n_2)))
+   
+  axiom next :
+  (_C_2 : (\forall integer a_2;
+            (\forall integer b_2;
+              (gcd(b_2, (a_2 % b_2)) == gcd(a_2, b_2)))))
+  
+}
+
+uint32 gcd_rec(uint32 a, uint32 b)
+  decreases (_C_13 : b);
+behavior default:
+  assigns \nothing;
+  ensures (_C_10 : ((_C_11 : is_gcd((\at(a,Old) :> integer),
+                                    (\at(b,Old) :> integer),
+                                    (\result :> integer))) &&
+                     (_C_12 : ((\result :> integer) ==
+                                gcd((\at(a,Old) :> integer),
+                                    (\at(b,Old) :> integer))))));
+{  
+   (var uint32 tmp);
+   
+   (var uint32 __retres);
+   
+   {  (if (_C_4 : (b == (0 :> uint32))) then 
+      {  (_C_3 : (__retres = a));
+         
+         (goto return_label)
+      } else ());
+      (_C_8 : (tmp = (_C_7 : gcd_rec(b, (_C_6 : ((_C_5 : (a % b)) :> uint32))))));
+      (_C_9 : (__retres = tmp));
+      (return_label : 
+      (return __retres))
+   }
+}

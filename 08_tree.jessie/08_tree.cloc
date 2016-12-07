@@ -1,0 +1,322 @@
+[_C_35]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 115
+begin = 13
+end = 25
+
+[valid_tools_workaround_nonull]
+name = "Lemma valid_tools_workaround_nonull"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 65
+begin = 4
+end = 309
+
+[calc_size_nonnegative]
+name = "Lemma calc_size_nonnegative"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 57
+begin = 7
+end = 127
+
+[_C_28]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 134
+begin = 3
+end = 14
+
+[valid_tools_workaround_single_standalone]
+name = "Lemma valid_tools_workaround_single_standalone"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 69
+begin = 4
+end = 187
+
+[search_node]
+name = "Function search_node"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 123
+begin = 11
+end = 64
+
+[null_not_found]
+name = "Lemma null_not_found"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 29
+begin = 6
+end = 107
+
+[_C_31]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 140
+begin = 1
+end = 84
+
+[null_size]
+name = "Lemma null_size"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 47
+begin = 7
+end = 56
+
+[_C_4]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 39
+begin = 9
+end = 177
+
+[_C_32]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 116
+begin = 12
+end = 54
+
+[_C_23]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 136
+begin = 7
+end = 15
+
+[_C_19]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 128
+begin = 20
+end = 74
+
+[type_invariant_parent_child_right]
+name = "Lemma type_invariant_parent_child_right"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 106
+begin = 4
+end = 166
+
+[_C_13]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 94
+begin = 6
+end = 192
+
+[_C_5]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 48
+begin = 10
+end = 31
+
+[_C_12]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 85
+begin = 6
+end = 192
+
+[_C_33]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 116
+begin = 12
+end = 54
+
+[type_invariant_child_nodes]
+name = "Lemma type_invariant_child_nodes"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 77
+begin = 4
+end = 1287
+
+[present_in_given_node]
+name = "Lemma present_in_given_node"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 24
+begin = 6
+end = 188
+
+[_C_22]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 138
+begin = 3
+end = 12
+
+[_C_9]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 66
+begin = 6
+end = 78
+
+[_C_30]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 133
+begin = 6
+end = 22
+
+[_C_6]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 50
+begin = 10
+end = 141
+
+[_C_24]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 136
+begin = 3
+end = 15
+
+[_C_20]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 127
+begin = 20
+end = 77
+
+[type_invariant_node_values_parent_left]
+name = "Lemma type_invariant_node_values_parent_left"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 84
+begin = 4
+end = 988
+
+[not_null_size]
+name = "Lemma not_null_size"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 49
+begin = 7
+end = 170
+
+[_C_3]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 34
+begin = 9
+end = 176
+
+[calc_size_child]
+name = "Lemma calc_size_child"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 53
+begin = 7
+end = 186
+
+[_C_17]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 125
+begin = 1
+end = 7
+
+[_C_7]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 54
+begin = 10
+end = 155
+
+[_C_27]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 134
+begin = 7
+end = 14
+
+[left_child]
+name = "Lemma left_child"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 33
+begin = 6
+end = 201
+
+[type_invariant_node_values_parent_right]
+name = "Lemma type_invariant_node_values_parent_right"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 93
+begin = 4
+end = 633
+
+[_C_15]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 107
+begin = 5
+end = 120
+
+[_C_26]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 135
+begin = 11
+end = 27
+
+[_C_10]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 70
+begin = 6
+end = 134
+
+[_C_8]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 58
+begin = 10
+end = 90
+
+[_C_18]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 129
+begin = 18
+end = 32
+
+[_C_29]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 133
+begin = 14
+end = 22
+
+[_C_14]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 102
+begin = 5
+end = 118
+
+[right_child]
+name = "Lemma right_child"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 38
+begin = 6
+end = 203
+
+[type_invariant_parent_child_left]
+name = "Lemma type_invariant_parent_child_left"
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 101
+begin = 4
+end = 331
+
+[_C_2]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 30
+begin = 9
+end = 78
+
+[_C_34]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 117
+begin = 12
+end = 145
+
+[_C_16]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 125
+begin = 18
+end = 28
+
+[_C_1]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 25
+begin = 9
+end = 152
+
+[_C_25]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 135
+begin = 19
+end = 27
+
+[_C_11]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 78
+begin = 6
+end = 152
+
+[_C_21]
+file = "/home/work/workspace/education/acsl-seminars/./08_tree.c"
+line = 131
+begin = 8
+end = 9
+

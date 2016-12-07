@@ -1,0 +1,43 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+logic integer max(integer a, integer b) =
+(if (a > b) then a else b)
+
+int32 max(int32 a, int32 b)
+behavior default:
+  assigns \nothing;
+  ensures (_C_4 : ((_C_5 : (\result >= \at(a,Old))) &&
+                    ((_C_7 : (\result >= \at(b,Old))) &&
+                      ((_C_9 : ((\result == \at(a,Old)) ||
+                                 (\result == \at(b,Old)))) &&
+                        (_C_10 : ((\result :> integer) ==
+                                   max((\at(a,Old) :> integer),
+                                       (\at(b,Old) :> integer))))))));
+{  
+   (var int32 tmp);
+   
+   {  (if (_C_3 : (a > b)) then (_C_2 : (tmp = a)) else (_C_1 : (tmp = b)));
+      
+      (return tmp)
+   }
+}

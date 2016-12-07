@@ -1,0 +1,236 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
+
+axiomatic CountAxiomatic {
+
+  logic integer _Count{L}(intP[..] a, int32 v, integer i_1, integer j_0)
+  reads (a + [i_1..(j_0 - 1)]).intM;
+   
+  axiom Count0{L} :
+  (_C_1 : (\forall intP[..] a_0;
+            (\forall int32 v_0;
+              (\forall integer i_2;
+                (\forall integer j_1;
+                  ((i_2 >= j_1) ==> (_Count{L}(a_0, v_0, i_2, j_1) == 0)))))))
+   
+  axiom Count1{L} :
+  (_C_2 : (\forall intP[..] a_1;
+            (\forall int32 v_1;
+              (\forall integer i_3;
+                (\forall integer j_2;
+                  (\forall integer k_1;
+                    ((((0 <= i_3) && (i_3 <= j_2)) && (j_2 <= k_1)) ==>
+                      (_Count{L}(a_1, v_1, i_3, k_1) ==
+                        (_Count{L}(a_1, v_1, i_3, j_2) +
+                          _Count{L}(a_1, v_1, j_2, k_1))))))))))
+   
+  axiom Count2{L} :
+  (_C_3 : (\forall intP[..] a_2;
+            (\forall int32 v_2;
+              (\forall integer i_4;
+                ((((a_2 + i_4).intM != v_2) ==>
+                   (_Count{L}(a_2, v_2, i_4, (i_4 + 1)) == 0)) &&
+                  (((a_2 + i_4).intM == v_2) ==>
+                    (_Count{L}(a_2, v_2, i_4, (i_4 + 1)) == 1)))))))
+   
+  logic integer _CountWithHole{L}(intP[..] c, int32 v_3, integer i_5,
+                                  integer h, integer j_3) =
+  (_Count{L}(c, v_3, i_5, h) + _Count{L}(c, v_3, (h + 1), j_3))
+   
+  logic integer _CountWithoutHole{L}(intP[..] c_0, int32 v_4, integer i_6,
+                                     integer h_0, integer j_4) =
+  (_Count{L}(c_0, v_4, i_6, h_0) + _Count{L}(c_0, v_4, h_0, j_4))
+  
+}
+
+lemma CountLemma{L} :
+(_C_4 : (\forall intP[..] a_3;
+          (\forall int32 v_5;
+            (\forall integer i_7;
+              ((0 <= i_7) ==>
+                (_Count{L}(a_3, v_5, 0, (i_7 + 1)) ==
+                  (_Count{L}(a_3, v_5, 0, i_7) +
+                    _Count{L}(a_3, v_5, i_7, (i_7 + 1)))))))))
+
+predicate _Permutation{A, B}(intP[..] c_1, int32 n_1) =
+(\forall int32 x;
+  (_Count{A}(c_1, x, 0, (n_1 :> integer)) ==
+    _Count{B}(c_1, x, 0, (n_1 :> integer))))
+
+axiomatic Swapping {
+
+  predicate _Swap{L1, L2}(intP[..] a_4, integer size) =
+  (\exists int32 i_8;
+    (\exists int32 j_5;
+      (((((((size > 0) && (i_8 >= (0 :> int32))) && (j_5 >= (0 :> int32))) &&
+           (i_8 != j_5)) &&
+          ((i_8 :> integer) < size)) &&
+         ((j_5 :> integer) < size)) ==>
+        (((\at((a_4 + (i_8 :> integer)).intM,L1) ==
+            \at((a_4 + (j_5 :> integer)).intM,L2)) &&
+           (\at((a_4 + (j_5 :> integer)).intM,L1) ==
+             \at((a_4 + (i_8 :> integer)).intM,L2))) &&
+          (\forall integer k_2;
+            (((((k_2 != (i_8 :> integer)) && (k_2 != (j_5 :> integer))) &&
+                (0 <= k_2)) &&
+               (k_2 < size)) ==>
+              (\at((a_4 + k_2).intM,L1) == \at((a_4 + k_2).intM,L2))))))))
+   
+  lemma SCA{L1, L2} :
+  (_C_5 : (\forall intP[..] a_5;
+            (\forall int32 size_0;
+              (_Swap{L1,
+                L2}(a_5, (size_0 :> integer)) ==>
+                _Permutation{L1,
+                L2}(a_5, size_0)))))
+   
+  lemma CA{L1} :
+  (_C_6 : (\forall intP[..] a_6;
+            (\forall int32 size_1;
+              (((size_1 > (0 :> int32)) &&
+                 (\forall integer k_3;
+                   (((0 <= k_3) && (k_3 < (size_1 :> integer))) ==>
+                     \at(\at((((\offset_min(\at(a_6,L1)) <= \at(k_3,L1)) &&
+                                (\offset_max(\at(a_6,L1)) >= \at(k_3,L1))) &&
+                               (\forall integer __framac_tmp1;
+                                 (((\at(k_3,L1) <= __framac_tmp1) &&
+                                    (__framac_tmp1 <= \at(k_3,L1))) ==>
+                                   true))),L1),L1)))) ==>
+                _Permutation{L1,
+                L1}(a_6, size_1)))))
+  
+}
+
+unit swap(intP[..] x, intP[..] y)
+  requires ((_C_17 : ((_C_18 : \at((((\offset_min(\at(x,Here)) <=
+                                       \at(0,Here)) &&
+                                      (\offset_max(\at(x,Here)) >=
+                                        \at(0,Here))) &&
+                                     true),Here)) &&
+                       (_C_19 : \at((((\offset_min(\at(y,Here)) <=
+                                        \at(0,Here)) &&
+                                       (\offset_max(\at(y,Here)) >=
+                                         \at(0,Here))) &&
+                                      true),Here)))) &&
+             (_C_20 : ((x == y) || (x != y))));
+behavior default:
+  assigns x.intM,
+  y.intM;
+  ensures (_C_14 : ((_C_15 : (\at(y,Old).intM == \at(x.intM,Old))) &&
+                     (_C_16 : (\at(x,Old).intM == \at(y.intM,Old)))));
+{  
+   (var int32 s);
+   
+   {  (_C_8 : (s = (_C_7 : x.intM)));
+      (_C_11 : ((_C_10 : x.intM) = (_C_9 : y.intM)));
+      (_C_13 : ((_C_12 : y.intM) = s));
+      
+      (return ())
+   }
+}
+
+unit divide(intP[..] a, int32 size_0, int32 b)
+  requires ((_C_63 : (size_0 > (0 :> int32))) &&
+             (_C_64 : \at((if (\at(0,Here) <=
+                                \at(((size_0 :> integer) - 1),Here)) then 
+                          (((\offset_min(\at(a,Here)) <= \at(0,Here)) &&
+                             (\offset_max(\at(a,Here)) >=
+                               \at(((size_0 :> integer) - 1),Here))) &&
+                            (\forall integer __framac_tmp5;
+                              (((\at(0,Here) <= __framac_tmp5) &&
+                                 (__framac_tmp5 <=
+                                   \at(((size_0 :> integer) - 1),Here))) ==>
+                                true))) else true),Here)));
+behavior default:
+  ensures (_C_58 : ((_C_59 : (\exists int32 i_9;
+                               (\forall int32 j_7;
+                                 ((((0 :> int32) <= j_7) && (j_7 < i_9)) ==>
+                                   ((\at(a,Old) + (j_7 :> integer)).intM <=
+                                     \at(b,Old)))))) &&
+                     ((_C_61 : (\exists int32 i_10;
+                                 (\forall int32 j_8;
+                                   (((i_10 < j_8) && (j_8 < \at(size_0,Old))) ==>
+                                     ((\at(a,Old) + (j_8 :> integer)).intM >=
+                                       \at(b,Old)))))) &&
+                       (_C_62 : _Permutation{Old,
+                       Here}(\at(a,Old), \at(size_0,Old))))));
+{  
+   (var int32 l);
+   
+   (var int32 r);
+   
+   {  (_C_21 : (l = (0 :> int32)));
+      (_C_24 : (r = (_C_23 : ((_C_22 : (size_0 - (1 :> int32))) :> int32))));
+      
+      loop 
+      behavior default:
+        invariant (_C_35 : (\forall int32 j_6;
+                             (((((0 :> int32) <= j_6) && (j_6 < l)) ==>
+                                ((a + (j_6 :> integer)).intM <= b)) &&
+                               (((r < j_6) && (j_6 < size_0)) ==>
+                                 ((a + (j_6 :> integer)).intM >= b)))));
+      behavior default:
+        invariant (_C_28 : ((((_C_31 : (r >= (0 :> int32))) &&
+                               (_C_32 : (r < size_0))) &&
+                              (_C_33 : (l >= (0 :> int32)))) &&
+                             (_C_34 : (l < size_0))));
+      behavior default:
+        invariant (_C_27 : \at((if (\at(0,Here) <=
+                                     \at(((size_0 :> integer) - 1),Here)) then 
+                               (((\offset_min(\at(a,Here)) <= \at(0,Here)) &&
+                                  (\offset_max(\at(a,Here)) >=
+                                    \at(((size_0 :> integer) - 1),Here))) &&
+                                 (\forall integer __framac_tmp4;
+                                   (((\at(0,Here) <= __framac_tmp4) &&
+                                      (__framac_tmp4 <=
+                                        \at(((size_0 :> integer) - 1),Here))) ==>
+                                     true))) else true),Here));
+      behavior default:
+        invariant (_C_26 : _Permutation{Pre, Here}(a, size_0));
+      variant (_C_25 : ((r :> integer) - (l :> integer)));
+      while (true)
+      {  
+         {  (if (_C_36 : (l < r)) then () else 
+            (goto while_0_break));
+            
+            {  (if (_C_57 : ((_C_56 : (_C_55 : (a + l)).intM) <= b)) then 
+               (_C_54 : (l = (_C_53 : ((_C_52 : (l + (1 :> int32))) :> int32)))) else 
+               (if (_C_51 : ((_C_50 : (_C_49 : (a + r)).intM) >= b)) then 
+               (_C_48 : (r = (_C_47 : ((_C_46 : (r - (1 :> int32))) :> int32)))) else 
+               {  (_C_39 : swap((_C_37 : (a + l)), (_C_38 : (a + r))));
+                  (_C_42 : (l = (_C_41 : ((_C_40 : (l + (1 :> int32))) :> int32))));
+                  (_C_45 : (r = (_C_44 : ((_C_43 : (r - (1 :> int32))) :> int32))))
+               }))
+            }
+         }
+      };
+      (while_0_break : ());
+      
+      (return ())
+   }
+}

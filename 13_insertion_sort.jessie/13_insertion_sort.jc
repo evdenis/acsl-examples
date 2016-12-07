@@ -1,0 +1,167 @@
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+tag voidP = {
+}
+
+type voidP = [voidP]
+
+tag charP = voidP with {
+  int8 charM: 8;
+}
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
+
+predicate _Swap{L1, L2}(intP[..] a, integer i_1, integer j_0) =
+(((\at((a + i_1).intM,L1) == \at((a + j_0).intM,L2)) &&
+   (\at((a + j_0).intM,L1) == \at((a + i_1).intM,L2))) &&
+  (\forall integer k_1;
+    (((k_1 != i_1) && (k_1 != j_0)) ==>
+      (\at((a + k_1).intM,L1) == \at((a + k_1).intM,L2)))))
+
+predicate _Permut{L1, L2}(intP[..] a_0, integer l, integer h) {
+case Permut_refl{L}: \at((\forall intP[..] a_1;
+                           (\forall integer l_0;
+                             (\forall integer h_0;
+                               _Permut{L,
+                               L}(a_1, l_0, h_0)))),L);
+  
+  case Permut_sym{L1, L2}: (\forall intP[..] a_2;
+                             (\forall integer l_1;
+                               (\forall integer h_1;
+                                 (_Permut{L1,
+                                   L2}(a_2, l_1, h_1) ==>
+                                   _Permut{L2,
+                                   L1}(a_2, l_1, h_1)))));
+  
+  case Permut_trans{L1, L2, L3}: (\forall intP[..] a_3;
+                                   (\forall integer l_2;
+                                     (\forall integer h_2;
+                                       ((_Permut{L1,
+                                          L2}(a_3, l_2, h_2) &&
+                                          _Permut{L2,
+                                          L3}(a_3, l_2, h_2)) ==>
+                                         _Permut{L1,
+                                         L3}(a_3, l_2, h_2)))));
+  
+  case Permut_swap{L1, L2}: (\forall intP[..] a_4;
+                              (\forall integer l_3;
+                                (\forall integer h_3;
+                                  (\forall integer i_2;
+                                    (\forall integer j_1;
+                                      ((((((l_3 <= i_2) && (i_2 <= h_3)) &&
+                                           (l_3 <= j_1)) &&
+                                          (j_1 <= h_3)) &&
+                                         _Swap{L1,
+                                         L2}(a_4, i_2, j_1)) ==>
+                                        _Permut{L1,
+                                        L2}(a_4, l_3, h_3)))))));
+  
+}
+
+predicate _Sorted{L}(intP[..] a_5, integer l_4, integer h_4) =
+(\forall integer i_3;
+  (\forall integer j_2;
+    ((((l_4 <= i_3) && (i_3 <= j_2)) && (j_2 < h_4)) ==>
+      ((a_5 + i_3).intM <= (a_5 + j_2).intM))))
+
+unit insert_sort(intP[..] t, int32 n_1)
+  requires (_C_43 : \at((if (\at(0,Here) <= \at(((n_1 :> integer) - 1),Here)) then 
+                        (((\offset_min(\at(t,Here)) <= \at(0,Here)) &&
+                           (\offset_max(\at(t,Here)) >=
+                             \at(((n_1 :> integer) - 1),Here))) &&
+                          (\forall integer __framac_tmp1;
+                            (((\at(0,Here) <= __framac_tmp1) &&
+                               (__framac_tmp1 <=
+                                 \at(((n_1 :> integer) - 1),Here))) ==>
+                              true))) else true),Here));
+behavior default:
+  ensures (_C_42 : _Sorted{Here}(\at(t,Old), 0,
+                                 ((\at(n_1,Old) :> integer) - 1)));
+{  
+   (var int32 i);
+   
+   (var int32 j);
+   
+   (var int32 mv);
+   
+   {  (if (_C_1 : (n_1 <= (1 :> int32))) then 
+      (goto return_label) else ());
+      (_C_2 : (i = (1 :> int32)));
+      
+      loop 
+      behavior default:
+        invariant (_C_5 : ((_C_6 : ((0 :> int32) <= i)) &&
+                            (_C_7 : (i <= n_1))));
+      behavior default:
+        invariant (_C_4 : _Sorted{Here}(t, 0, (i :> integer)));
+      variant (_C_3 : ((n_1 :> integer) - (i :> integer)));
+      while (true)
+      {  
+         {  (if (_C_8 : (i < n_1)) then () else 
+            (goto while_0_break));
+            
+            {  (_C_11 : (mv = (_C_10 : (_C_9 : (t + i)).intM)));
+               (_C_12 : (j = i));
+               
+               loop 
+               behavior default:
+                 invariant (_C_17 : ((_C_18 : ((0 :> int32) <= j)) &&
+                                      (_C_19 : (j <= i))));
+               behavior default:
+                 invariant (_C_16 : ((j == i) ==>
+                                      _Sorted{Here}(t, 0, (i :> integer))));
+               behavior default:
+                 invariant (_C_15 : ((j < i) ==>
+                                      _Sorted{Here}(t, 0,
+                                                    ((i :> integer) + 1))));
+               behavior default:
+                 invariant (_C_14 : (\forall integer k_2;
+                                      ((((j :> integer) <= k_2) &&
+                                         (k_2 < (i :> integer))) ==>
+                                        ((t + k_2).intM > mv))));
+               variant (_C_13 : j);
+               while (true)
+               {  
+                  {  (if (_C_20 : (j > (0 :> int32))) then () else 
+                     (goto while_1_break));
+                     
+                     {  (if (_C_25 : ((_C_24 : (_C_23 : (t +
+                                                          (_C_22 : ((_C_21 : 
+                                                                    (j -
+                                                                    (1 :> int32))) :> int32)))).intM) <=
+                                       mv)) then 
+                        (goto while_1_break) else ());
+                        (_C_32 : ((_C_31 : (_C_30 : (t + j)).intM) = 
+                        (_C_29 : (_C_28 : (t +
+                                            (_C_27 : ((_C_26 : (j -
+                                                                 (1 :> int32))) :> int32)))).intM)))
+                     };
+                     (_C_35 : (j = (_C_34 : ((_C_33 : (j - (1 :> int32))) :> int32))))
+                  }
+               };
+               (while_1_break : ());
+               (_C_38 : ((_C_37 : (_C_36 : (t + j)).intM) = mv))
+            };
+            (_C_41 : (i = (_C_40 : ((_C_39 : (i + (1 :> int32))) :> int32))))
+         }
+      };
+      (while_0_break : ());
+      (return_label : 
+      (return ()))
+   }
+}
