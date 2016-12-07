@@ -3,8 +3,7 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
 <prover id="0" name="Alt-Ergo" version="1.01" timelimit="5" memlimit="8000"/>
-<prover id="1" name="Alt-Ergo" version="1.01" alternative="-Em" timelimit="5" memlimit="8000"/>
-<file name="../bubble_sort.mlw" expanded="true">
+<file name="../16_bubble_sort.mlw" expanded="true">
 <theory name="Axiomatic_Padding" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Int32_of_Int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
@@ -315,25 +314,25 @@
 </theory>
 <theory name="Struct_intP" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Function_swap_safety" sum="832b176add678ca8a6bb37ed7b8590cc" expanded="true">
- <goal name="WP_parameter swap" expl="Function swap, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.01" steps="8"/></proof>
+<theory name="Function_sort_swap3_safety" sum="832b176add678ca8a6bb37ed7b8590cc" expanded="true">
+ <goal name="WP_parameter sort_swap3" expl="Function sort_swap3, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.02" steps="8"/></proof>
  </goal>
 </theory>
 <theory name="Logic_swapped" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Function_swap_behaviors" sum="c271c27b86151782f165f98b2c75618e" expanded="true">
- <goal name="WP_parameter swap_ensures_default" expl="Function swap, default behavior" expanded="true">
+<theory name="Function_sort_swap3_behaviors" sum="c271c27b86151782f165f98b2c75618e" expanded="true">
+ <goal name="WP_parameter sort_swap3_ensures_default" expl="Function sort_swap3, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.03" steps="96"/></proof>
  </goal>
 </theory>
 <theory name="Exceptions" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Function_swap_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Function_sort_swap3_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Function_bubble_sort_safety" sum="52d1409d62c8ce44341375561b8ce433" expanded="true">
  <goal name="WP_parameter bubble_sort" expl="Function bubble_sort, safety" expanded="true">
- <proof prover="0"><result status="timeout" time="4.99"/></proof>
+ <proof prover="0"><result status="timeout" time="4.98"/></proof>
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter bubble_sort.1" expl="1. Integer cast (integer overflow)">
   <proof prover="0"><result status="valid" time="0.02" steps="6"/></proof>
@@ -345,15 +344,13 @@
   <proof prover="0"><result status="valid" time="0.02" steps="17"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.4" expl="4. integer overflow">
-  <proof prover="0"><result status="valid" time="0.04" steps="95"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="95"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.5" expl="5. Pointer dereference (Dereference by offset. Validity)">
-  <proof prover="0"><result status="unknown" time="0.08"/></proof>
-  <proof prover="1"><result status="unknown" time="0.07"/></proof>
+  <proof prover="0"><result status="unknown" time="0.07"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.6" expl="6. Pointer dereference (Dereference by offset. Validity)">
-  <proof prover="0"><result status="unknown" time="0.07"/></proof>
-  <proof prover="1"><result status="unknown" time="0.07"/></proof>
+  <proof prover="0"><result status="unknown" time="0.06"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.7" expl="7. Integer cast (integer overflow)">
   <proof prover="0"><result status="valid" time="0.02" steps="26"/></proof>
@@ -361,7 +358,7 @@
   <goal name="WP_parameter bubble_sort.8" expl="8. integer overflow">
   <proof prover="0"><result status="valid" time="0.02" steps="27"/></proof>
   </goal>
-  <goal name="WP_parameter bubble_sort.9" expl="9. Precondition for swap (Requires clause. Internal)">
+  <goal name="WP_parameter bubble_sort.9" expl="9. Precondition for sort_swap3 (Requires clause. Internal)">
   <proof prover="0"><result status="valid" time="0.02" steps="29"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.10" expl="10. Integer cast (integer overflow)">
@@ -371,8 +368,7 @@
   <proof prover="0"><result status="valid" time="0.02" steps="33"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.12" expl="12. loop variant decrease">
-  <proof prover="0"><result status="timeout" time="4.99"/></proof>
-  <proof prover="1"><result status="timeout" time="4.97"/></proof>
+  <proof prover="0"><result status="timeout" time="4.98"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.13" expl="13. Integer cast (integer overflow)">
   <proof prover="0"><result status="valid" time="0.02" steps="26"/></proof>
@@ -381,8 +377,7 @@
   <proof prover="0"><result status="valid" time="0.09" steps="209"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.15" expl="15. loop variant decrease">
-  <proof prover="0"><result status="timeout" time="4.99"/></proof>
-  <proof prover="1"><result status="timeout" time="4.99"/></proof>
+  <proof prover="0"><result status="timeout" time="4.98"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort.16" expl="16. Integer cast (integer overflow)">
   <proof prover="0"><result status="valid" time="0.02" steps="17"/></proof>
@@ -392,14 +387,13 @@
   </goal>
   <goal name="WP_parameter bubble_sort.18" expl="18. loop variant decrease">
   <proof prover="0"><result status="unknown" time="0.07"/></proof>
-  <proof prover="1"><result status="unknown" time="0.07"/></proof>
   </goal>
  </transf>
  </goal>
 </theory>
-<theory name="Logic__Permut" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Logic__IPermut" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Function_swap" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Function_sort_swap3" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Logic_sorted" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -423,10 +417,10 @@
   <proof prover="0"><result status="valid" time="0.02" steps="21"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_permutation.5" expl="5. Assertion in line 117">
-  <proof prover="0"><result status="timeout" time="4.98"/></proof>
+  <proof prover="0"><result status="timeout" time="4.97"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_permutation.6" expl="6. Assertion in line 127">
-  <proof prover="0"><result status="valid" time="0.02" steps="28"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="28"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_permutation.7" expl="7. loop invariant preservation">
   <proof prover="0"><result status="valid" time="0.02" steps="28"/></proof>
@@ -435,7 +429,7 @@
   <proof prover="0"><result status="valid" time="0.02" steps="21"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_permutation.9" expl="9. loop invariant preservation">
-  <proof prover="0"><result status="valid" time="0.02" steps="25"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="25"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_permutation.10" expl="10. Assertion in line 130">
   <proof prover="0"><result status="valid" time="0.02" steps="17"/></proof>
@@ -452,40 +446,40 @@
  </transf>
  </goal>
  <goal name="WP_parameter bubble_sort_ensures_sorted" expl="Function bubble_sort, behavior sorted" expanded="true">
- <proof prover="0"><result status="timeout" time="4.98"/></proof>
+ <proof prover="0"><result status="timeout" time="4.97"/></proof>
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter bubble_sort_ensures_sorted.1" expl="1. loop invariant init">
-  <proof prover="0"><result status="valid" time="0.03" steps="89"/></proof>
+  <proof prover="0"><result status="valid" time="0.04" steps="89"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.2" expl="2. Assertion in line 88">
   <proof prover="0"><result status="valid" time="0.02" steps="13"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.3" expl="3. Assertion in line 92">
-  <proof prover="0"><result status="valid" time="0.02" steps="35"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="35"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.4" expl="4. loop invariant init">
-  <proof prover="0"><result status="valid" time="0.04" steps="77"/></proof>
+  <proof prover="0"><result status="valid" time="0.05" steps="77"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.5" expl="5. Assertion in line 112">
-  <proof prover="0"><result status="valid" time="0.02" steps="30"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="30"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.6" expl="6. Assertion in line 113">
-  <proof prover="0"><result status="valid" time="0.02" steps="30"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="30"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.7" expl="7. Assertion in line 114">
-  <proof prover="0"><result status="valid" time="0.02" steps="31"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="31"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.8" expl="8. Assertion in line 118">
-  <proof prover="0"><result status="valid" time="0.02" steps="35"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="35"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.9" expl="9. Assertion in line 119">
-  <proof prover="0"><result status="valid" time="0.12" steps="232"/></proof>
+  <proof prover="0"><result status="valid" time="0.14" steps="232"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.10" expl="10. Assertion in line 120">
-  <proof prover="0"><result status="timeout" time="4.97"/></proof>
+  <proof prover="0"><result status="timeout" time="4.96"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.11" expl="11. Assertion in line 123">
-  <proof prover="0"><result status="valid" time="0.12" steps="231"/></proof>
+  <proof prover="0"><result status="valid" time="0.14" steps="231"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.12" expl="12. Assertion in line 125">
   <proof prover="0"><result status="valid" time="0.03" steps="41"/></proof>
@@ -494,19 +488,19 @@
   <proof prover="0"><result status="valid" time="0.03" steps="42"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.14" expl="14. loop invariant preservation">
-  <proof prover="0"><result status="valid" time="1.77" steps="2103"/></proof>
+  <proof prover="0"><result status="valid" time="1.98" steps="2103"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.15" expl="15. Assertion in line 129">
-  <proof prover="0"><result status="timeout" time="4.98"/></proof>
+  <proof prover="0"><result status="timeout" time="4.93"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.16" expl="16. loop invariant preservation">
-  <proof prover="0"><result status="valid" time="0.06" steps="124"/></proof>
+  <proof prover="0"><result status="valid" time="0.08" steps="124"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.17" expl="17. Assertion in line 129">
-  <proof prover="0"><result status="valid" time="0.02" steps="42"/></proof>
+  <proof prover="0"><result status="valid" time="0.03" steps="42"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.18" expl="18. loop invariant preservation">
-  <proof prover="0"><result status="valid" time="0.05" steps="92"/></proof>
+  <proof prover="0"><result status="valid" time="0.06" steps="92"/></proof>
   </goal>
   <goal name="WP_parameter bubble_sort_ensures_sorted.19" expl="19. Ensures clause (Postcondition)">
   <proof prover="0"><result status="valid" time="0.02" steps="14"/></proof>

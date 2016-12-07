@@ -8,21 +8,21 @@ USERWHYTHREEOPT=
 
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
-why3ml: bubble_sort.mlw
+why3ml: 16_bubble_sort.mlw
 	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3ide: bubble_sort.mlw
+why3ide: 16_bubble_sort.mlw
 	 why3 ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3replay: bubble_sort.mlw
+why3replay: 16_bubble_sort.mlw
 	 why3 replay $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3autoreplay: bubble_sort.mlw
+why3autoreplay: 16_bubble_sort.mlw
 	 why3 replay -q -f --obsolete-only $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3typecheck: bubble_sort.mlw
+why3typecheck: 16_bubble_sort.mlw
 	 why3 prove --type-only $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3prove: bubble_sort.mlw
+why3prove: 16_bubble_sort.mlw
 	 why3 prove $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 

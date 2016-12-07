@@ -21,23 +21,23 @@ Component 1:
  swapped calls: 
 
 Component 2:
- _Permut calls: _Permut, swapped, _Permut, _Permut, _Permut,
-_Permut, _Permut,
-_Permut
+ _IPermut calls: _IPermut, swapped, _IPermut, _IPermut,
+_IPermut, _IPermut, _IPermut,
+_IPermut
 
 ******************************
 Call graph: has 2 components
 ******************************
 Component 0:
- swap calls: 
+ sort_swap3 calls: 
 
 Component 1:
- bubble_sort calls: swap
+ bubble_sort calls: sort_swap3
 
 Adding invariants
 Computation of regions
-Separation: treating function swap
-Separation: treating function swap
+Separation: treating function sort_swap3
+Separation: treating function sort_swap3
 Separation: treating function bubble_sort
 Separation: treating function bubble_sort
 Computation of effects
@@ -68,7 +68,7 @@ Effects for logic function swapped:
 Effects: doing one iteration
 Effects: doing one iteration
 Effects: fixpoint reached
-Effects for logic function _Permut:
+Effects for logic function _IPermut:
  alloc_table: 
  tag_table: 
  memories: (a_1_4 : mem-field "intM") at (L1, L2)
@@ -82,7 +82,7 @@ Effects: doing one iteration...
 Effects: doing one iteration...
 Effects: doing one iteration...
 Effects: fixpoint reached
-Effects for function swap:
+Effects for function sort_swap3:
  reads:  alloc_table: (t_5 : alloc-root "intP") at (Here)
          tag_table: (t_5 : intP) at (Here)
          memories: (t_5 : mem-field "intM") at (Here, Old)
@@ -902,13 +902,13 @@ Translate dummies
 Translate standalone logic functions
 Logic function sorted
 Logic function swapped
-Logic function _Permut
+Logic function _IPermut
 Translate axiomatic declarations
 Axiomatic Padding
 Translate lemmas
 Translate functions
-Pre-treatement Function swap
+Pre-treatement Function sort_swap3
 Pre-treatement Function bubble_sort
-Function swap
+Function sort_swap3
 Function bubble_sort
 Produce makefile

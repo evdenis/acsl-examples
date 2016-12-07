@@ -39,30 +39,30 @@ predicate swapped{L1, L2}(intP[..] a_0, integer i_1, integer j_0) =
     (((k_1 != i_1) && (k_1 != j_0)) ==>
       (\at((a_0 + k_1).intM,L1) == \at((a_0 + k_1).intM,L2)))))
 
-predicate _Permut{L1, L2}(intP[..] a_1, integer index_start,
-                          integer end_start) {
+predicate _IPermut{L1, L2}(intP[..] a_1, integer index_start,
+                           integer end_start) {
 case Permut_refl{L}: \at((\forall intP[..] a_2;
                            (\forall integer index_start_0;
                              (\forall integer end_start_0;
-                               _Permut{L,
+                               _IPermut{L,
                                L}(a_2, index_start_0, end_start_0)))),L);
   
   case Permut_sym{L1, L2}: (\forall intP[..] a_3;
                              (\forall integer index_start_1;
                                (\forall integer end_start_1;
-                                 (_Permut{L1,
+                                 (_IPermut{L1,
                                    L2}(a_3, index_start_1, end_start_1) ==>
-                                   _Permut{L2,
+                                   _IPermut{L2,
                                    L1}(a_3, index_start_1, end_start_1)))));
   
   case Permut_trans{L1, L2, L3}: (\forall intP[..] a_4;
                                    (\forall integer index_start_2;
                                      (\forall integer end_start_2;
-                                       ((_Permut{L1,
+                                       ((_IPermut{L1,
                                           L2}(a_4, index_start_2, end_start_2) &&
-                                          _Permut{L2,
+                                          _IPermut{L2,
                                           L3}(a_4, index_start_2, end_start_2)) ==>
-                                         _Permut{L1,
+                                         _IPermut{L1,
                                          L3}(a_4, index_start_2, end_start_2)))));
   
   case Permut_swap{L1, L2}: (\forall intP[..] a_5;
@@ -76,12 +76,12 @@ case Permut_refl{L}: \at((\forall intP[..] a_2;
                                           (j_1 <= end_start_3)) &&
                                          swapped{L1,
                                          L2}(a_5, i_2, j_1)) ==>
-                                        _Permut{L1,
+                                        _IPermut{L1,
                                         L2}(a_5, index_start_3, end_start_3)))))));
   
 }
 
-unit swap(intP[..] t, int32 i, int32 j, int32 n_9)
+unit sort_swap3(intP[..] t, int32 i, int32 j, int32 n_9)
   requires (_C_15 : ((_C_16 : \at((((\offset_min(\at(t,Here)) <=
                                       \at((i :> integer),Here)) &&
                                      (\offset_max(\at(t,Here)) >=
@@ -142,7 +142,7 @@ behavior sorted:
   ensures (_C_81 : sorted{Here}(\at(a,Old), 0,
                                 ((\at(length,Old) :> integer) - 1)));
 behavior permutation:
-  ensures (_C_82 : _Permut{Old,
+  ensures (_C_82 : _IPermut{Old,
           Here}(\at(a,Old), 0, ((\at(length,Old) :> integer) - 1)));
 {  
    (var int32 up);
@@ -168,7 +168,7 @@ behavior permutation:
                                 (k_4 < (length :> integer))) ==>
                                ((a + k_4).intM == \at((a + k_4).intM,Pre)))));
       behavior permutation:
-        invariant (_C_20 : _Permut{Pre,
+        invariant (_C_20 : _IPermut{Pre,
                   Here}(a, 0, ((length :> integer) - 1)));
       while (true)
       {  
@@ -183,7 +183,7 @@ behavior permutation:
                };
                
                {  
-                  (assert for permutation: (_C_29 : (jessie : _Permut{Pre,
+                  (assert for permutation: (_C_29 : (jessie : _IPermut{Pre,
                                                     Here}(a, 0,
                                                           ((length :> integer) -
                                                             1)))));
@@ -231,7 +231,7 @@ behavior permutation:
                                       ((a + ((down :> integer) - 1)).intM <=
                                         (a + ((down :> integer) + 1)).intM)));
                behavior permutation:
-                 invariant (_C_34 : _Permut{Pre,
+                 invariant (_C_34 : _IPermut{Pre,
                            Here}(a, 0, ((length :> integer) - 1)));
                while (true)
                {  
@@ -252,7 +252,7 @@ behavior permutation:
                      
                      {  
                         {  
-                           (assert for permutation: (_C_56 : (jessie : _Permut{Pre,
+                           (assert for permutation: (_C_56 : (jessie : _IPermut{Pre,
                                                              Here}(a, 0,
                                                                    ((length :> integer) -
                                                                     1)))));
@@ -282,13 +282,13 @@ behavior permutation:
                                                                     1)).intM))));
                            ()
                         };
-                        (_C_62 : swap(a, down,
-                                      (_C_61 : ((_C_60 : (down -
-                                                           (1 :> int32))) :> int32)),
-                                      length));
+                        (_C_62 : sort_swap3(a, down,
+                                            (_C_61 : ((_C_60 : (down -
+                                                                 (1 :> int32))) :> int32)),
+                                            length));
                         
                         {  
-                           (assert for permutation: (_C_63 : (jessie : _Permut{Pre,
+                           (assert for permutation: (_C_63 : (jessie : _IPermut{Pre,
                                                              Here}(a, 0,
                                                                    ((length :> integer) -
                                                                     1)))));
@@ -346,7 +346,7 @@ behavior permutation:
                         };
                         
                         {  
-                           (assert for permutation: (_C_73 : (jessie : _Permut{Pre,
+                           (assert for permutation: (_C_73 : (jessie : _IPermut{Pre,
                                                              Here}(a, 0,
                                                                    ((length :> integer) -
                                                                     1)))));
@@ -364,7 +364,7 @@ behavior permutation:
                };
                
                {  
-                  (assert for permutation: (_C_75 : (jessie : _Permut{Pre,
+                  (assert for permutation: (_C_75 : (jessie : _IPermut{Pre,
                                                     Here}(a, 0,
                                                           ((length :> integer) -
                                                             1)))));
@@ -378,7 +378,7 @@ behavior permutation:
       (while_0_break : ());
       
       {  
-         (assert for permutation: (_C_80 : (jessie : _Permut{Pre,
+         (assert for permutation: (_C_80 : (jessie : _IPermut{Pre,
                                            Here}(a, 0,
                                                  ((length :> integer) - 1)))));
          ()
