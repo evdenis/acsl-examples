@@ -31,13 +31,13 @@
 */
 
 /*@ axiomatic Swapping {
-    predicate Swap{L1,L2}(int *a, integer size) =
+    predicate PRSwap{L1,L2}(int *a, integer size) =
        \exists int i, int j; (size > 0 && i >= 0 && j >= 0 && i != j && i < size && j < size) ==>
        (\at(a[i],L1) == \at(a[j],L2) &&  \at(a[j],L1) == \at(a[i],L2) &&
        (\forall integer k; k != i && k != j && 0 <= k < size ==> \at(a[k],L1) == \at(a[k],L2)));
   
     lemma SCA{L1, L2}:
-       \forall int* a, int size; Swap{L1, L2}(a, size) ==> Permutation{L1, L2}(a, size);
+       \forall int* a, int size; PRSwap{L1, L2}(a, size) ==> Permutation{L1, L2}(a, size);
   
     lemma CA{L1}:
        \forall int* a, int size; (size > 0 && \forall integer k; 0 <= k < size ==> \at(\valid(a+k), L1)) ==> Permutation{L1, L1}(a, size);

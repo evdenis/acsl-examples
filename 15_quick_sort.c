@@ -6,7 +6,7 @@
   @ assigns t[i],t[j];
   @ ensures Swap{Old,Here}(t,i,j);
   @*/
-void swap(int t[], int i, int j) {
+void sort_swap2(int t[], int i, int j) {
   int tmp = t[i];
   t[i] = t[j];
   t[j] = tmp;
@@ -36,12 +36,12 @@ void quick_rec(int t[], int l, int r) {
   for (i = l + 1; i <= r; i++) {
     if (t[i] < v) {
     L1:
-      swap(t,i,++m);
+      sort_swap2(t,i,++m);
       //@ assert Permut{L1,Here}(t,l,r);
     }
   }
   //@ assert l <= m <= r;
- L: swap(t,l,m);
+ L: sort_swap2(t,l,m);
   //@ assert Permut{L,Here}(t,l,r);
   quick_rec(t,l,m-1);
   quick_rec(t,m+1,r);

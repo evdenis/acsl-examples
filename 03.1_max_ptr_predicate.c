@@ -1,4 +1,4 @@
-/*@ predicate swapped{L1,L2}(int *a, int *b) =
+/*@ predicate pr_swapped{L1,L2}(int *a, int *b) =
        \at(*a,L1) == \at(*b,L2) &&
        \at(*b,L1) == \at(*a,L2);
  */
@@ -9,7 +9,7 @@
     assigns *a;
     assigns *b;
 
-    ensures swapped{Here,Pre}(a,b);
+    ensures pr_swapped{Here,Pre}(a,b);
  */
 void swap(int *a, int *b);
 
@@ -25,7 +25,7 @@ void swap(int *a, int *b);
       ensures *b == \old(*b);
     behavior swap:
       assumes *a > *b;
-      ensures swapped{Here,Pre}(a, b);
+      ensures pr_swapped{Here,Pre}(a, b);
     complete behaviors;
     disjoint behaviors;
  */

@@ -6,7 +6,7 @@
   @ assigns t[i],t[j];
   @ ensures Swap{Old,Here}(t,i,j);
   @*/
-void swap(int t[], int i, int j) {
+void sort_swap(int t[], int i, int j) {
   int tmp = t[i];
   t[i] = t[j];
   t[j] = tmp;
@@ -51,7 +51,7 @@ void sel_sort(int t[], int n) {
       }
     }
   L:
-    swap(t,i,mi);
+    sort_swap(t,i,mi);
     //@ assert Permut{L,Here}(t,0,n-1);
   }
 }

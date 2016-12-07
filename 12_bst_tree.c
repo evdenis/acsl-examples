@@ -1,86 +1,86 @@
-struct node
+struct rbnode
 {
-   struct node *right;
-   struct node *left;
+   struct rbnode *right;
+   struct rbnode *left;
    unsigned long value;
 };
 
-struct root { struct node *node; };
+struct root { struct rbnode *rbnode; };
 
 /*@
-  @ //Calc num of nodes
+  @ //Calc num of rbnodes
   @ axiomatic btree_calc_size {
-  @    logic integer calc_size{L}(struct node * node) =
-  @       (node == \null) ? 0 :
-  @          calc_size(node->right) + calc_size(node->left) + 1;
+  @    logic integer rbcalc_size{L}(struct rbnode * rbnode) =
+  @       (rbnode == \null) ? 0 :
+  @          rbcalc_size(rbnode->right) + rbcalc_size(rbnode->left) + 1;
   @
-  @    //axiom calc_size_nonnegative:
-  @    //   \forall struct node * node;
-  @    //      calc_size(node) >= 0;
+  @    //axiom rbcalc_size_nonnegative:
+  @    //   \forall struct rbnode * rbnode;
+  @    //      rbcalc_size(rbnode) >= 0;
   @ }
   @ */
 
-/*@ inductive exists_in_tree{L}(struct node *node, integer v) {
+/*@ inductive exists_in_tree{L}(struct rbnode *rbnode, integer v) {
   @    case exists1{L}:
-  @       \forall struct node *node, integer v;
-  @       \valid(node) && node->value == v ==>
-  @       exists_in_tree(node, v);
+  @       \forall struct rbnode *rbnode, integer v;
+  @       \valid(rbnode) && rbnode->value == v ==>
+  @       exists_in_tree(rbnode, v);
   @    case exists2{L}:
-  @       \forall struct node *node, integer v;
-  @       \valid(node) && exists_in_tree(node->left, v) ==>
-  @       exists_in_tree(node, v);
+  @       \forall struct rbnode *rbnode, integer v;
+  @       \valid(rbnode) && exists_in_tree(rbnode->left, v) ==>
+  @       exists_in_tree(rbnode, v);
   @    case exists3{L}:
-  @       \forall struct node *node, integer v;
-  @       \valid(node) && exists_in_tree(node->right, v) ==>
-  @       exists_in_tree(node, v);
+  @       \forall struct rbnode *rbnode, integer v;
+  @       \valid(rbnode) && exists_in_tree(rbnode->right, v) ==>
+  @       exists_in_tree(rbnode, v);
   @ }
   @*/
 
-/*@ inductive correct_btree{L}(struct node * node) {
+/*@ inductive correct_btree{L}(struct rbnode * rbnode) {
   @    case nil{L}:
   @       correct_btree(\null);
   @    case next{L}:
-  @       \forall struct node *node;
-  @          \valid(node) &&
-  @          correct_btree(node->left) &&
-  @          correct_btree(node->right) &&
-  @          (\forall integer v; exists_in_tree(node->left, v) ==> v < node->value) &&
-  @          (\forall integer v; exists_in_tree(node->right, v) ==> v > node->value) ==>
-  @             correct_btree(node);
+  @       \forall struct rbnode *rbnode;
+  @          \valid(rbnode) &&
+  @          correct_btree(rbnode->left) &&
+  @          correct_btree(rbnode->right) &&
+  @          (\forall integer v; exists_in_tree(rbnode->left, v) ==> v < rbnode->value) &&
+  @          (\forall integer v; exists_in_tree(rbnode->right, v) ==> v > rbnode->value) ==>
+  @             correct_btree(rbnode);
   @ }
   @*/
 
-/*@ inductive size_correct{L}(struct node *node) {
+/*@ inductive size_correct{L}(struct rbnode *rbnode) {
   @   case nil{L}:
   @     size_correct(\null);
   @   case ind{L}:
-  @     \forall struct node * node; \valid(node) ==>
-  @       calc_size(node->left) >= 0 && calc_size(node->right) >= 0 ==>
-  @       size_correct(node->left) && size_correct(node->right) ==>
-  @       size_correct(node);
+  @     \forall struct rbnode * rbnode; \valid(rbnode) ==>
+  @       rbcalc_size(rbnode->left) >= 0 && rbcalc_size(rbnode->right) >= 0 ==>
+  @       size_correct(rbnode->left) && size_correct(rbnode->right) ==>
+  @       size_correct(rbnode);
   @ }
   @ */
 
 
 /*@ requires \valid(root); // pointer is non-null
-  @ requires correct_btree(root->node); // tree has proper structure
-  @ requires size_correct(root->node);
-  @ ensures \result != \null <==> exists_in_tree(root->node, value);
+  @ requires correct_btree(root->rbnode); // tree has proper structure
+  @ requires size_correct(root->rbnode);
+  @ ensures \result != \null <==> exists_in_tree(root->rbnode, value);
   @ ensures \result != \null ==>
   @            (
   @               \valid(\result) &&
   @               \result->value == value
   @            );
   @*/
-struct node* search_node(struct root* root, unsigned long value)
+struct rbnode* search_rbnode(struct root* root, unsigned long value)
 {
-	struct node* n = root->node;
+	struct rbnode* n = root->rbnode;
 
-	/*@ loop invariant exists_in_tree(root->node, value) <==> exists_in_tree(n, value);
+	/*@ loop invariant exists_in_tree(root->rbnode, value) <==> exists_in_tree(n, value);
 	  @ loop invariant correct_btree(n);
      @ loop invariant size_correct(n);
-     @ loop invariant calc_size(n) >= 0;
-	  @ loop variant (calc_size(n));
+     @ loop invariant rbcalc_size(n) >= 0;
+	  @ loop variant (rbcalc_size(n));
 	  @*/
 	while (n)
 	{
