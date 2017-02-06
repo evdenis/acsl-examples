@@ -97,8 +97,8 @@ struct node* search_node(struct root* root, unsigned long value);
   @   \forall struct node * node;
   @    (\valid(node) && \valid(parent(node)) 
   @     ==>
-  @     ((parent(node)->value > node->value) <==>
-  @      (parent(node)->left == node)));
+  @     ((parent(node)->value < node->value) <==>
+  @      (parent(node)->right == node)));
   @
   @ // Childler of given node have this node as parent.
   @ lemma type_invariant_parent_child_left:
